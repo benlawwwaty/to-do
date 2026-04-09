@@ -1,0 +1,107 @@
+{
+  "info": {
+    "name": "Daily Reminders API",
+    "_postman_id": "reminders-api-collection",
+    "description": "Complete test collection for Daily Reminders Backend",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3000" },
+    { "key": "reminderId", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "🏠 Health Check",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/",
+        "description": "Verify the server is running and see all available endpoints"
+      }
+    },
+    {
+      "name": "📋 Get All Reminders",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/reminders",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "reminders"],
+          "query": [
+            { "key": "category", "value": "work",   "disabled": true },
+            { "key": "priority", "value": "high",   "disabled": true },
+            { "key": "isActive", "value": "true",   "disabled": true }
+          ]
+        },
+        "description": "Get all reminders. Optional query params: category, priority, isActive"
+      }
+    },
+    {
+      "name": " Get Today's Reminders",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/reminders/today",
+        "description": "Get all active reminders scheduled for today"
+      }
+    },
+    {
+      "name": " Get Single Reminder",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/reminders/{{reminderId}}",
+        "description": "Get a reminder by its MongoDB _id"
+      }
+    },
+    {
+      "name": " Create Reminder",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/api/reminders",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"اجتماع الفريق\",\n  \"description\": \"مراجعة تقدم المشروع الأسبوعي\",\n  \"reminderTime\": \"09:00\",\n  \"daysOfWeek\": [0, 1, 2, 3, 4],\n  \"category\": \"work\",\n  \"priority\": \"high\"\n}"
+        },
+        "description": "Create a new reminder. daysOfWeek: 0=Sun, 1=Mon ... 6=Sat. Empty array = every day."
+      }
+    },
+    {
+      "name": " Create Daily Reminder (every day)",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/api/reminders",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \" drink water \",\n  \"description\": \"   drink water now\",\n  \"reminderTime\": \"08:00\",\n  \"daysOfWeek\": [],\n  \"category\": \"health\",\n  \"priority\": \"medium\"\n}"
+        }
+      }
+    },
+    {
+      "name": "  Update Reminder",
+      "request": {
+        "method": "PUT",
+        "url": "{{baseUrl}}/api/reminders/{{reminderId}}",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"اجتماع الفريق - محدث\",\n  \"reminderTime\": \"10:00\",\n  \"priority\": \"high\"\n}"
+        }
+      }
+    },
+    {
+      "name": " Toggle Active/Inactive",
+      "request": {
+        "method": "PATCH",
+        "url": "{{baseUrl}}/api/reminders/{{reminderId}}/toggle",
+        "description": "Switch isActive between true and false"
+      }
+    },
+    {
+      "name": " Delete Reminder",
+      "request": {
+        "method": "DELETE",
+        "url": "{{baseUrl}}/api/reminders/{{reminderId}}"
+      }
+    }
+  ]
+}
